@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Partner 4 | Calculadora SUNRUN + HQS</title>
+  <style>
+    :root{--ink:#13243a;--navy:#0b2340;--blue:#075da9;--gold:#e89a27;--line:#dbe4ef;--muted:#607086;--bg:#f3f6fa;--white:#fff;--danger:#a52c2c;--radius:18px}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+    .top{background:var(--navy);color:#fff;padding:31px max(24px,calc((100vw - 1190px)/2)) 28px;border-bottom:4px solid var(--gold)}
+    .eyebrow{font-size:12px;letter-spacing:.17em;text-transform:uppercase;font-weight:750;color:#b9d6f3}
+    h1{margin:7px 0 6px;font-size:clamp(25px,3vw,38px);line-height:1.14;letter-spacing:-.035em}
+    .top p{margin:0;color:#c6d4e6;font-size:14px}
+    .top .hqs{color:#fff}.top .plus{color:var(--gold)}
+    .shell{max-width:1238px;margin:28px auto 45px;padding:0 24px}
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+    .stack{display:grid;gap:22px;min-width:0}
+    .card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 9px 28px rgba(14,35,64,.045);overflow:hidden}
+    .card-head{padding:21px 24px 0;display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+    .card-head h2{margin:0;font-size:19px;letter-spacing:-.025em}
+    .subtle{color:var(--muted);font-size:12px}
+    .card-body{padding:21px 24px 25px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}
+    .full{grid-column:1/-1}
+    label{display:block;font-size:12px;font-weight:750;color:#4b5d72;margin-bottom:6px}
+    input,select{width:100%;height:45px;border:1px solid #cbd8e7;border-radius:10px;background:#fff;color:var(--ink);font:600 15px system-ui,-apple-system,"Segoe UI",Arial,sans-serif;padding:0 12px;outline:0}
+    input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px #075da920}
+    input[readonly]{background:#f4f7fa;color:#52657d}
+    .helper{color:var(--muted);font-size:12px;margin:6px 0 0}
+    .tag{font-size:11px;font-weight:800;letter-spacing:.09em;color:#0b5a9b;background:#eaf3fc;padding:5px 9px;border-radius:7px;white-space:nowrap}
+    .notice{margin-top:17px;border:1px solid #f1baba;background:#fff4f4;color:var(--danger);font-size:13px;font-weight:700;border-radius:10px;padding:12px 14px}
+    .metrics{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+    .metric{padding:14px 15px;border:1px solid #e1e8f0;border-radius:12px;background:#fbfcfe;min-width:0}
+    .metric .name{font-size:12px;color:#5e6f83;font-weight:650;margin-bottom:6px}
+    .metric .value{font-size:clamp(16px,2vw,21px);line-height:1.18;font-weight:850;letter-spacing:-.035em;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+    .metric.blue .value{color:var(--blue)}
+    .metric.gold .value{color:#a8640c}
+    .metric small{display:block;color:#687b8e;font-size:11px;margin-top:5px}
+    .section-label{margin:22px 0 11px;font-size:12px;font-weight:850;letter-spacing:.1em;color:#53657a;text-transform:uppercase}
+    .summary{background:var(--navy);color:#fff;border-radius:14px;padding:20px 22px;margin-bottom:18px}
+    .summary .name{color:#c1d3e7;font-size:12px;font-weight:650}
+    .summary .value{font-size:clamp(26px,3vw,34px);font-weight:850;letter-spacing:-.045em;line-height:1.3;font-variant-numeric:tabular-nums}
+    .summary .caption{font-size:11px;color:#c4d6e9;margin-top:4px}
+    .ac-item{border:1px solid #e2e9f1;border-radius:13px;padding:17px;margin-bottom:13px}
+    .ac-item-head{font-weight:800;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+    .ac-result{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}
+    .ac-result div{padding:10px;background:#f4f7fb;border-radius:9px}
+    .ac-result span{display:block;color:#627286;font-size:11px}
+    .ac-result strong{display:block;font-size:16px;margin-top:2px}
+    .actions{display:flex;gap:10px;margin-top:13px;flex-wrap:wrap}
+    button{border:1px solid #bacbdd;border-radius:9px;padding:10px 15px;background:#fff;color:var(--navy);font:750 13px system-ui,-apple-system,"Segoe UI",Arial,sans-serif;cursor:pointer}
+    button.primary{background:var(--navy);border-color:var(--navy);color:#fff}
+    button:hover{filter:brightness(.95)}button:disabled{opacity:.5;cursor:not-allowed}
+    .foot{color:#77869a;font-size:11px;margin-top:20px;text-align:center}
+    @media(max-width:800px){.layout{grid-template-columns:1fr}.top{padding:28px 22px}.shell{padding:0 14px;margin-top:18px}.card-head{padding:19px 19px 0}.card-body{padding:18px 19px 22px}}
+    @media(max-width:420px){.form-grid{gap:12px}.metrics{gap:9px}.metric{padding:12px}.metric .value{font-size:16px}}
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="eyebrow">PARTNER 4 · Herramienta comercial independiente · FULL Comisión</div>
+    <h1>PARTNER <span class="plus">4</span></h1>
+    <p>SUNRUN + HQS ENERGY · Calculadora de EPC, comisiones y dimensionamiento solar</p>
+  </header>
+  <main class="shell">
+    <div class="layout">
+      <div class="stack">
+        <section class="card">
+          <div class="card-head"><h2>Configuración del sistema</h2><span class="tag">SOLO FULL</span></div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div><label for="panels">Cantidad de paneles</label><input id="panels" type="number" min="0" step="1" value="20"></div>
+              <div><label for="panelWatts">Watts por panel</label><input id="panelWatts" value="410 W" readonly></div>
+              <div><label for="batteries">Cantidad de baterías</label><input id="batteries" type="number" min="0" step="1" value="1"></div>
+              <div><label for="role">Rol del vendedor</label><select id="role">
+                <option value="0.06">Trainee — 6%</option>
+                <option value="0.10" selected>Consultor — 10%</option>
+                <option value="0.11">Líder — 11%</option>
+                <option value="0.12">Gerente — 12%</option>
+                <option value="0.13">Gerente Ejecutivo — 13%</option>
+                <option value="0.14">Jr. Partner — 14%</option>
+                <option value="0.15">Partner — 15%</option>
+                <option value="0.16">Partner Ejecutivo — 16%</option>
+              </select></div>
+              <div class="full"><label for="saleEpc">EPC de venta ($/W)</label><input id="saleEpc" type="number" min="0" step="0.01" placeholder="Se usará el EPC base si está vacío"><p class="helper">El EPC base del sistema incluye paneles y baterías. El EPC de venta puede ajustarse en FULL.</p></div>
+            </div>
+            <div class="notice" id="eligibility" role="status" hidden>Sistema no elegible. Mínimo 10 paneles; 2 o más baterías requieren al menos 20 paneles.</div>
+            <div class="section-label">EPC y pagos estimados</div>
+            <div class="metrics">
+              <div class="metric blue"><div class="name">EPC base</div><div class="value" id="epcBase">—</div></div>
+              <div class="metric blue"><div class="name">EPC venta</div><div class="value" id="epcSale">—</div></div>
+              <div class="metric"><div class="name">Pago fijo aproximado</div><div class="value" id="fixedPayment">—</div></div>
+              <div class="metric"><div class="name">Pago escalonado aproximado</div><div class="value" id="steppedPayment">—</div></div>
+            </div>
+          </div>
+        </section>
+        <section class="card">
+          <div class="card-head"><h2>Promedio de consumo</h2></div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div><label for="month1">Mes alto 1 (kWh)</label><input id="month1" type="number" min="0" value="0"></div>
+              <div><label for="month2">Mes alto 2 (kWh)</label><input id="month2" type="number" min="0" value="0"></div>
+              <div><label for="month3">Mes alto 3 (kWh)</label><input id="month3" type="number" min="0" value="0"></div>
+            </div>
+            <div class="metrics" style="margin-top:17px">
+              <div class="metric"><div class="name">Promedio mensual</div><div class="value" id="average">—</div></div>
+              <div class="metric blue"><div class="name">Paneles recomendados al 120%</div><div class="value" id="panels120">—</div></div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="stack">
+        <section class="card">
+          <div class="card-head"><h2>Resultados de venta</h2></div>
+          <div class="card-body">
+            <div class="summary"><div class="name">Sistema de venta</div><div class="value" id="saleSystem">—</div><div class="caption">Monto calculado con el EPC de venta</div></div>
+            <div class="metrics">
+              <div class="metric"><div class="name">Tamaño del sistema</div><div class="value" id="size">—</div></div>
+              <div class="metric"><div class="name">Producción anual</div><div class="value" id="annual">—</div></div>
+              <div class="metric"><div class="name">Producción mensual</div><div class="value" id="monthly">—</div></div>
+              <div class="metric"><div class="name">Offset promedio</div><div class="value" id="offset">—</div></div>
+              <div class="metric"><div class="name">Sistema base</div><div class="value" id="baseSystem">—</div></div>
+              <div class="metric gold"><div class="name">Comisión base</div><div class="value" id="baseCommission">—</div></div>
+              <div class="metric"><div class="name">Diferencial EPC</div><div class="value" id="margin">—</div></div>
+              <div class="metric gold"><div class="name">Comisión de venta</div><div class="value" id="saleCommission">—</div><small>70% vendedor · 30% compañía sobre diferencial positivo</small></div>
+            </div>
+          </div>
+        </section>
+        <section class="card">
+          <div class="card-head"><h2>Consumos futuros</h2><span class="subtle">Aires acondicionados</span></div>
+          <div class="card-body">
+            <div id="airList"></div>
+            <div class="actions"><button type="button" class="primary" id="addAir">Añadir otro aire</button><button type="button" id="removeAir">Quitar último aire</button></div>
+            <div class="section-label">Dimensionamiento futuro</div>
+            <div class="metrics">
+              <div class="metric"><div class="name">Consumo futuro total</div><div class="value" id="futureMonthly">—</div></div>
+              <div class="metric blue"><div class="name">Paneles adicionales</div><div class="value" id="futurePanels">—</div></div>
+              <div class="metric"><div class="name">Sistema base al 120%</div><div class="value" id="futureBase">—</div></div>
+              <div class="metric gold"><div class="name">Sistema recomendado final</div><div class="value" id="futureFinal">—</div></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class="foot">PARTNER 4 · SUNRUN + HQS ENERGY · Calculadora FULL independiente · Pagos mensuales aproximados sujetos a condiciones del producto</div>
+  </main>
+<script>
+'use strict';
+const WATTS=410;
+const HOURS=1440;
+const SOLAR_RATE=2.40;
+const BATTERY_COST=12500;
+const PANEL_MONTHLY_KWH=WATTS*HOURS/1000/12;
+const AIR_SEER_OPTIONS={
+  12000:[17,18,19,20,21,22,23,24,25,26,27,28],
+  18000:[17,18,19,20,21,22,23,23.5,24,24.5,25,26,27,27.5],
+  24000:[17,18,19,20,21,21.5,22,23,24,24.5,25,26,27],
+  36000:[16,17,18,19,20,21,22]
+};
+const fixedTable={
+  1:{
+    10:[[5.423,217.67],[5.346,214.91],[5.269,212.15],[5.192,209.39],[5.116,206.63],[5.039,203.87],[4.962,201.11],[4.886,198.35],[4.809,195.59]],
+    14:[[4.540,249.14],[4.462,245.28],[4.385,241.41],[4.309,237.54],[4.232,233.68],[4.155,229.81],[4.078,225.95]],
+    18:[[4.180,288.89],[4.102,283.92],[4.025,278.95],[3.948,273.98],[3.871,269.01],[3.794,264.04],[3.716,259.07]],
+    22:[[3.797,316.49],[3.720,310.42],[3.643,304.35],[3.565,298.27],[3.488,292.20]]
+  },
+  2:{
+    22:[[5.108,432.57],[5.031,426.49],[4.955,420.42],[4.879,414.35],[4.803,408.27],[4.727,402.20]],
+    24:[[4.916,451.89],[4.840,445.26],[4.764,438.64],[4.687,432.01],[4.611,425.39],[4.535,418.76]]
+  }
+};
+const steppedTable={
+  1:{
+    10:[[5.431,184.24],[5.342,181.48],[5.252,178.72],[5.163,175.96],[5.073,173.19],[4.984,170.43],[4.894,167.67],[4.804,164.91],[4.715,162.15]],
+    14:[[4.541,210.74],[4.451,206.87],[4.360,203.00],[4.270,199.14],[4.180,195.28],[4.090,191.41]],
+    18:[[4.075,238.89],[3.985,233.92],[3.894,228.95],[3.804,223.98],[3.713,219.01]],
+    22:[[3.769,266.49],[3.679,260.42],[3.589,254.35],[3.498,248.27],[3.408,242.20]]
+  },
+  2:{
+    22:[[5.120,369.01],[5.031,362.93],[4.942,356.86],[4.852,350.79],[4.763,344.71]],
+    24:[[4.925,385.02],[4.836,378.39],[4.746,371.77],[4.657,365.14],[4.567,358.51]]
+  }
+};
+const $=id=>document.getElementById(id);
+const n=id=>Number($(id).value)||0;
+const usd=v=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2}).format(v);
+const fmt=(v,d=0)=>new Intl.NumberFormat('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}).format(v);
+const put=(id,value)=>$(id).textContent=value;
+const airs=[{id:1,btu:0,seer:0,hours:0,customSeer:false}];
+let nextAirId=2;
+function interpolatePayment(points,epc){
+  const sorted=[...points].sort((a,b)=>a[0]-b[0]);
+  let left=sorted[0],right=sorted[1];
+  if(epc>=sorted[sorted.length-1][0]){
+    left=sorted[sorted.length-2];right=sorted[sorted.length-1];
+  }else if(epc>sorted[0][0]){
+    for(let i=0;i<sorted.length-1;i++){
+      if(epc>=sorted[i][0]&&epc<=sorted[i+1][0]){left=sorted[i];right=sorted[i+1];break;}
+    }
+  }
+  return left[1]+(epc-left[0])*(right[1]-left[1])/(right[0]-left[0]);
+}
+function paymentEstimate(table,panels,batteries,epc){
+  const batteryTable=table[batteries];
+  if(!batteryTable||!epc)return 0;
+  const rows=Object.keys(batteryTable).map(Number).sort((a,b)=>a-b);
+  if(!rows.length)return 0;
+  const at=count=>interpolatePayment(batteryTable[count],epc);
+  if(batteryTable[panels])return at(panels);
+  if(rows.length===1)return at(rows[0]);
+  if(panels<=rows[0])return at(rows[0])+(panels-rows[0])/(rows[1]-rows[0])*(at(rows[1])-at(rows[0]));
+  for(let i=0;i<rows.length-1;i++){
+    if(panels>=rows[i]&&panels<=rows[i+1])return at(rows[i])+(panels-rows[i])/(rows[i+1]-rows[i])*(at(rows[i+1])-at(rows[i]));
+  }
+  const last=rows.length-1;
+  return at(rows[last])+(panels-rows[last])/(rows[last]-rows[last-1])*(at(rows[last])-at(rows[last-1]));
+}
+function airMonthly(air){return air.btu>0&&air.seer>0&&air.hours>0?(air.btu/air.seer/1000)*air.hours*30:0;}
+function airPanels(air){const m=airMonthly(air);return m>0?Math.ceil(m/PANEL_MONTHLY_KWH):0;}
+function renderAirs(){
+  const list=$('airList');list.replaceChildren();
+  for(const [index,air] of airs.entries()){
+    const wrap=document.createElement('div');wrap.className='ac-item';
+    const seerOptions=AIR_SEER_OPTIONS[air.btu]||[];
+    wrap.innerHTML=`<div class="ac-item-head">Aire ${index+1}</div>
+      <div class="form-grid">
+        <div><label>Aire acondicionado</label><select data-field="btu">
+          <option value="0">Seleccionar BTU</option>
+          ${[12000,18000,24000,36000].map(v=>`<option value="${v}" ${v===air.btu?'selected':''}>${fmt(v)} BTU</option>`).join('')}
+        </select></div>
+        <div><label>SEER / SEER2</label><select data-field="seer" ${air.btu?'':'disabled'}>
+          <option value="">Seleccionar SEER</option>
+          ${seerOptions.map(v=>`<option value="${v}" ${!air.customSeer&&v===air.seer?'selected':''}>${v}</option>`).join('')}
+          <option value="custom" ${air.customSeer?'selected':''}>Otro / valor exacto</option>
+        </select></div>
+        ${air.customSeer?`<div><label>SEER / SEER2 exacto</label><input data-field="customSeer" type="number" min="10" max="40" step="0.1" value="${air.seer||''}" placeholder="Ej. 18.8"></div>`:''}
+        <div><label>Horas de uso diario</label><input data-field="hours" type="number" min="0" max="24" step="0.5" value="${air.hours||''}" placeholder="Ej. 8"></div>
+      </div>
+      <div class="ac-result"><div><span>Consumo mensual</span><strong data-result="monthly">${fmt(airMonthly(air))} kWh</strong></div><div><span>Paneles para este aire</span><strong data-result="panels">+${airPanels(air)}</strong></div></div>`;
+    const field=(name)=>wrap.querySelector(`[data-field="${name}"]`);
+    field('btu').addEventListener('change',e=>{air.btu=Number(e.target.value)||0;air.seer=0;air.customSeer=false;renderAirs();calc();});
+    field('seer').addEventListener('change',e=>{air.customSeer=e.target.value==='custom';air.seer=air.customSeer?0:Number(e.target.value)||0;renderAirs();calc();});
+    const custom=field('customSeer');
+    if(custom)custom.addEventListener('input',e=>{air.seer=Number(e.target.value)||0;calc();});
+    field('hours').addEventListener('input',e=>{air.hours=Number(e.target.value)||0;calc();});
+    list.appendChild(wrap);
+  }
+  $('removeAir').disabled=airs.length<=1;
+}
+function calc(){
+  const panels=n('panels'),batteries=n('batteries'),role=n('role'),saleEpcInput=n('saleEpc');
+  const validInputs=Number.isInteger(panels)&&Number.isInteger(batteries)&&panels>=0&&batteries>=0;
+  const eligible=validInputs&&panels>=10&&!(batteries>=2&&panels<20);
+  $('eligibility').hidden=eligible;
+  const watts=panels*WATTS;
+  const solar=eligible?watts*SOLAR_RATE:0;
+  const batteryTotal=eligible?batteries*BATTERY_COST:0;
+  const baseSystem=solar+batteryTotal;
+  const epcBase=eligible&&watts?baseSystem/watts:0;
+  const finalEpc=saleEpcInput>0?saleEpcInput:epcBase;
+  const saleSystem=eligible?watts*finalEpc:0;
+  const baseEpcForAdjustment=Number(epcBase.toFixed(2));
+  const saleEpcForAdjustment=saleEpcInput>0?Number(finalEpc.toFixed(2)):baseEpcForAdjustment;
+  const margin=eligible?(saleEpcForAdjustment-baseEpcForAdjustment)*watts:0;
+  const saleCommission=margin>0?margin*0.7:margin;
+  const baseCommission=eligible?baseSystem*role:0;
+  const annual=watts*HOURS/1000,monthly=annual/12;
+  const average=(n('month1')+n('month2')+n('month3'))/3;
+  const annualConsumption=average*12;
+  const offset=annualConsumption?annual/annualConsumption*100:0;
+  const panelsAt120=average>0?Math.ceil(average*1.2/PANEL_MONTHLY_KWH):0;
+  const fixed=eligible?paymentEstimate(fixedTable,panels,batteries,finalEpc):0;
+  const stepped=eligible?paymentEstimate(steppedTable,panels,batteries,finalEpc):0;
+  const futureMonthly=airs.reduce((s,a)=>s+airMonthly(a),0);
+  const futurePanels=airs.reduce((s,a)=>s+airPanels(a),0);
+  put('epcBase',fmt(epcBase,2));put('epcSale',fmt(eligible?finalEpc:0,2));
+  put('fixedPayment',usd(fixed));put('steppedPayment',usd(stepped));
+  put('average',fmt(average)+' kWh');put('panels120',panelsAt120+' paneles');
+  put('saleSystem',usd(saleSystem));put('size',fmt(watts/1000,2)+' kW');
+  put('annual',fmt(annual)+' kWh');put('monthly',fmt(monthly)+' kWh');
+  put('offset',fmt(offset)+'%');put('baseSystem',usd(baseSystem));
+  put('baseCommission',usd(baseCommission));put('margin',usd(margin));
+  put('saleCommission',usd(saleCommission));
+  put('futureMonthly',fmt(futureMonthly)+' kWh/mes');
+  put('futurePanels','+'+futurePanels+' paneles');
+  put('futureBase',panelsAt120+' paneles');
+  put('futureFinal',(panelsAt120+futurePanels)+' paneles');
+  for(const [index,air] of airs.entries()){
+    const wrap=$('airList').children[index];
+    if(!wrap)continue;
+    wrap.querySelector('[data-result="monthly"]').textContent=fmt(airMonthly(air))+' kWh';
+    wrap.querySelector('[data-result="panels"]').textContent='+'+airPanels(air);
+  }
+}
+for(const id of ['panels','batteries','role','saleEpc','month1','month2','month3']){
+  $(id).addEventListener('input',calc);$(id).addEventListener('change',calc);
+}
+$('addAir').addEventListener('click',()=>{airs.push({id:nextAirId++,btu:0,seer:0,hours:0,customSeer:false});renderAirs();calc();});
+$('removeAir').addEventListener('click',()=>{if(airs.length>1){airs.pop();renderAirs();calc();}});
+renderAirs();calc();
+</script>
+</body>
+</html>
